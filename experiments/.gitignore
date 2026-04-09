@@ -1,0 +1,4 @@
+# Ignore all experiment outputs
+*
+!*/
+!.gitignore

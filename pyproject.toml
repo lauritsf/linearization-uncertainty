@@ -1,0 +1,120 @@
+[build-system]
+requires = ["setuptools", "cython", "numpy"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autograph"
+version = "0.2.0"
+description = "Same Graph, Different Likelihoods: Calibration of Autoregressive Graph Generators via Permutation-Equivalent Encodings"
+readme = "README.md"
+requires-python = ">=3.13"
+license = {text = "BSD-3-Clause"}
+keywords = ["transformers", "graph generation", "calibration", "uncertainty", "linearization"]
+classifiers = [
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+# Core Dependencies (PyPI versions)
+dependencies = [
+    "torch>=2.5,<3",
+    "torch_geometric>=2.6,<3",
+    "numpy>=2.0,<3",
+    "scipy>=1.13",
+    "networkx>=3.2",
+    "pandas>=2.0",
+    "matplotlib>=3.8",
+    "seaborn>=0.13",
+    "rdkit>=2024.3",
+    "hydra-core>=1.3,<2",
+    "tqdm>=4.65",
+    "cython>=3.0",
+    "polygraph-benchmark>=1.0",
+    "lightning>=2.5,<3",
+    "transformers>=4.50,<5",
+    "tabulate>=0.9",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["autograph*"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0.2",
+    "pytest-check>=2.6.2",
+    "ruff>=0.2.0",
+    "ty>=0.0.14",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.format]
+docstring-code-format = true
+quote-style = "double"
+
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle errors
+    "F",     # pyflakes
+    "I",     # isort
+    "N",     # pep8-naming
+    "UP",    # pyupgrade, modern Python syntax
+    "B",     # flake8-bugbear
+    "A",     # flake8-builtins, shadowing builtins
+    "C4",    # flake8-comprehensions
+    "SIM",   # flake8-simplify
+    "RUF",   # ruff-specific rules
+    "D",     # pydocstyle, Google-style docstrings
+]
+ignore = [
+    "B008",  # allow function call in default argument (Hydra pattern)
+    "D100",  # missing module docstring
+    "D101",  # missing class docstring
+    "D102",  # missing method docstring
+    "D103",  # missing function docstring
+    "D104",  # missing public package docstring
+    "D105",  # missing magic method docstring
+    "D107",  # missing __init__ docstring
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["autograph"]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/**" = [
+    "D",       # no docstring enforcement for scripts
+    "E501",    # allow long lines in analysis scripts (table/figure literals, LaTeX)
+    "N806",    # allow scientific variable names (X, Y, NLL, ECE) in analysis code
+    "RUF001",  # allow ambiguous unicode in strings (math/LaTeX output)
+    "RUF002",  # allow ambiguous unicode in docstrings
+    "RUF003",  # allow ambiguous unicode in comments
+    "RUF005",  # iterable-unpacking rewrites, noisy in one-off scripts
+    "RUF059",  # unused unpacked variables, common in scripts
+    "SIM105",  # contextlib.suppress suggestion, over-engineered for scripts
+    "C408",    # allow dict() calls where readable
+    "B007",    # unused loop control variables (often kept for clarity)
+]
+"tests/**" = ["D"]     # no docstring enforcement for tests
+
+[tool.ty]
+
+[tool.ty.environment]
+python-version = "3.13"
+python-platform = "linux"
+
+[tool.ty.src]
+include = ["autograph", "scripts", "tests", "*.py"]
+exclude = ["**/__pycache__", ".venv"]
+
+[tool.ty.analysis]
+allowed-unresolved-imports = [
+    "autograph.data.sent_utils",
+    "rdkit.**",
+]
+

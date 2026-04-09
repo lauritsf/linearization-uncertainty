@@ -1,0 +1,4 @@
+_target_: autograph.data.GraphDataset
+root: ./datasets
+dataset_names: planar
+linearization_strategy: random_order
